@@ -1,6 +1,6 @@
 services:
   spark: 
-    image: jupyter/pyspark-notebook
+    image: quay.io/jupyter/pyspark-notebook
     container_name: tradecorp_training_spark
     ports:
       - '8888:8888'
