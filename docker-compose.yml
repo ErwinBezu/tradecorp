@@ -12,6 +12,9 @@ services:
       - ./tests:/home/jovyan/tests
     environment:
       PYSPARK_SUBMIT_ARGS: '--packages org.postgresql:postgresql:42.7.0 pyspark-shell'
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
   postgres:
     image: postgres:16
