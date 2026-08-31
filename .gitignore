@@ -1,5 +1,8 @@
 .env
+
 data/*.csv
 data/tmp/
+data/output/orders_enriched_by_country
+
 .ipynb_checkpoints/
 **/.ipynb_checkpoints/
