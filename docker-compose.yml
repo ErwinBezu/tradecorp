@@ -1,6 +1,6 @@
 services:
   spark: 
-    image: quay.io/jupyter/pyspark-notebook
+    build: .
     container_name: tradecorp_training_spark
     ports:
       - '8888:8888'
@@ -10,6 +10,8 @@ services:
       - ./notebooks:/home/jovyan/work
       - ./src:/home/jovyan/src
       - ./tests:/home/jovyan/tests
+      - ./.env:/home/jovyan/.env
+      - ./pytest.ini:/home/jovyan/pytest.ini
     environment:
       PYSPARK_SUBMIT_ARGS: '--packages org.postgresql:postgresql:42.7.0 pyspark-shell'
       POSTGRES_DB: ${POSTGRES_DB}

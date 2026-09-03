@@ -6,3 +6,8 @@ data/output/orders_enriched_by_country
 
 .ipynb_checkpoints/
 **/.ipynb_checkpoints/
+
+notebooks/azure.ipynb
+
+__pycache__/
+*.py[cod]
