@@ -40,6 +40,7 @@ FINAL_COLUMNS = [
 ]
 
 def run_pipeline():
+  """Exécute le pipeline ETL complet, de la lecture des données à leur écriture dans Azure Blob Storage."""
   spark = (
     SparkSession.builder
     .appName("TradeCorpETL")

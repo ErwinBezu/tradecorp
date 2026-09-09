@@ -6,6 +6,7 @@ from utils import rename_column, join_dataframes
 logger = logging.getLogger("TradeCorpETL")
 
 def add_currency_column(df, country_currency_df, exchange_rates):
+  """Ajoute la devise, le taux de change et calcule le sous-total en devise locale."""
   spark = df.sparkSession
 
   country_currency = (

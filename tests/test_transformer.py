@@ -2,6 +2,7 @@ from transformer import clean_orders, add_sous_total, clean_customers
 from enrichment import add_currency_column
 
 def test_clean_orders_removes_null_shipped_date(spark):
+  """Vérifie que les commandes sans date d'expédition sont supprimées."""
   data = [
     (1, "2024-01-01", "2024-01-05", "2024-01-04", 10.5, 1),
     (2, "2024-01-02", "2024-01-06", None, 12.0, 2),
@@ -15,6 +16,7 @@ def test_clean_orders_removes_null_shipped_date(spark):
   assert result.collect()[0]["order_id"] == 1
 
 def test_add_sous_total(spark):
+  """Vérifie le calcul du sous-total après remise."""
   data = [(10.0, 2, 0.1)]
   columns = ["prix_unitaire", "quantite", "discount"]
   df = spark.createDataFrame(data, columns)
@@ -25,6 +27,7 @@ def test_add_sous_total(spark):
   assert sous_total == 18.0
 
 def test_clean_customers(spark):
+  """Vérifie la normalisation des données clients."""
   data = [(1, "  Acme Corp  ", "  jean dupont  ", "  france  ", "Paris", "0123456789")]
   columns = ["customer_id", "company_name", "contact_name", "country", "city", "phone"]
   df = spark.createDataFrame(data, columns)
@@ -35,6 +38,7 @@ def test_clean_customers(spark):
   assert result["customer_country"] == "FRANCE"
 
 def test_add_currency_column(spark):
+  """Vérifie l'ajout de la devise et la conversion du sous-total."""
   data = [(1, "FRANCE", 100.0)]
   columns = ["order_id", "customer_country", "sous_total"]
   df = spark.createDataFrame(data, columns)

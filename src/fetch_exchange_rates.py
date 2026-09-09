@@ -10,6 +10,7 @@ logger = logging.getLogger("TradeCorpETL")
 API_URL = "https://api.exchangerate-api.com/v4/latest/USD"
 
 def fetch_exchange_rates():
+  """Récupère les taux de change depuis l'API."""
   logger.info("Récupération des taux de change")
 
   response = requests.get(API_URL, timeout=30)
@@ -20,6 +21,7 @@ def fetch_exchange_rates():
   return response.json()
 
 def upload_exchange_rates(data):
+  """Enregistre les taux de change dans le conteneur raw d'Azure Blob Storage."""
   blob_service_client = get_blob_service_client()
   container_client = blob_service_client.get_container_client("raw")
 
@@ -34,6 +36,7 @@ def upload_exchange_rates(data):
   logger.info("Upload terminé vers raw/%s", blob_name)
 
 def main():
+  """Récupère puis envoie les taux de change vers Azure Blob Storage."""
   try:
     data = fetch_exchange_rates()
     upload_exchange_rates(data)

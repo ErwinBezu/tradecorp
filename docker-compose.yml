@@ -28,7 +28,7 @@ services:
     ports:
       - '5433:5432'
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - airflow_pgdata:/var/lib/postgresql/data
   
   pgadmin:
     image: dpage/pgadmin4
@@ -42,7 +42,38 @@ services:
       - pgadmin:/var/lib/pgadmin
     depends_on:
       - postgres
-
+  
+  airflow:
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+    container_name: tradecorp_airflow
+    depends_on:
+      - postgres
+    ports:
+      - '8081:8080'
+    volumes: 
+      - ./dags:/opt/airflow/dags
+      - ./src:/opt/airflow/src
+      - ./data/trigger:/opt/airflow/data/trigger
+      - ./.env:/opt/airflow/.env
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    command: >
+        bash -c "
+        airflow db init &&
+        airflow users create
+        --username ${AIRFLOW_ADMIN_USERNAME}
+        --password ${AIRFLOW_ADMIN_PASSWORD}
+        --firstname Admin
+        --lastname Admin
+        --role Admin
+        --email ${AIRFLOW_ADMIN_EMAIL} || true &&
+        airflow webserver &
+        airflow scheduler
+        "
 volumes:
-  pgdata:
+  airflow_pgdata:
   pgadmin:
